@@ -3,7 +3,7 @@ const itemsController = require('./controllers/items');
 function initRoutes(router) {
     router.get('/', (ctx, next) => {
         console.log(ctx);
-        ctx.body = 'Hello, World';
+        ctx.body = 'Hello, World!';
     });
 
     router.get('/items', itemsController.getItems);
