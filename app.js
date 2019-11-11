@@ -9,28 +9,7 @@ const app = new Koa();
 const router = new Router();
 
 initRoutes(router);
-const db = new DB();
-
-// TODO: remove it
-db.getItems()
-.then(items => {
-    console.log(items);
-    return db.createItem({ price: 100, name: 'Something' });
-})
-.then(id => {
-    console.log(id);
-    return Promise.all([ db.getItems(), id ]);
-})
-.then(([ items, id ]) => {
-    console.log(items);
-    return db.deleteItem(id);
-})
-.then(() => {
-    return db.getItems();
-})
-.then(items => {
-    console.log(items);
-});
+app.db = new DB();
 
 app
 .use(bodyparser())

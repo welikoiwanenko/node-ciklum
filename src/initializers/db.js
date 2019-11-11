@@ -8,7 +8,6 @@ const writeFileAsync = util.promisify(fs.writeFile);
 
 class DB {
     constructor() {
-        // 1. Dir exists?
         const dirPath = path.join(__dirname, '../..', 'assets');
         if (!fs.existsSync(dirPath)) {
             fs.mkdirSync(dirPath);
@@ -46,7 +45,3 @@ class DB {
 }
 
 module.exports = DB;
-
-clientId = '56b2b71c-c19a-4d7a-863d-aefa5923e981',
-    'a6656be1-3144-414d-ab61-642ef7142f93'
-secret = 'cIozGp-XaL850bR6hcobiG5bIq9LDEirbrnhI-pA'
