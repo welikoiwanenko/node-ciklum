@@ -1,0 +1,52 @@
+const fs   = require('fs');
+const path = require('path');
+const util = require('util');
+const uuid = require('uuid/v4');
+
+const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile);
+
+class DB {
+    constructor() {
+        // 1. Dir exists?
+        const dirPath = path.join(__dirname, '../..', 'assets');
+        if (!fs.existsSync(dirPath)) {
+            fs.mkdirSync(dirPath);
+        }
+
+        this.filePath = path.join(dirPath, 'db.json');
+        if (!fs.existsSync(this.filePath)) {
+            fs.writeFileSync(this.filePath, JSON.stringify([]));
+        }
+    }
+
+    async getItems() {
+        const data = await readFileAsync(this.filePath);
+        return JSON.parse(data.toString());
+    }
+
+    async createItem({ price, name }) {
+        const data = await this.getItems();
+        const id = uuid();
+
+        data.push({
+            id,
+            price,
+            name,
+        });
+        await writeFileAsync(this.filePath, JSON.stringify(data));
+        return id;
+    }
+
+    async deleteItem(id) {
+        const data = await this.getItems();
+        const filteredData = data.filter(item => item.id !== id);
+        await writeFileAsync(this.filePath, JSON.stringify(filteredData));
+    }
+}
+
+module.exports = DB;
+
+clientId = '56b2b71c-c19a-4d7a-863d-aefa5923e981',
+    'a6656be1-3144-414d-ab61-642ef7142f93'
+secret = 'cIozGp-XaL850bR6hcobiG5bIq9LDEirbrnhI-pA'
