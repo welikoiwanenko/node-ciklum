@@ -1,30 +1,29 @@
 const LIVR = require('livr');
-const db   = require('../db_old');
 
 const itemsController = {
-    getItems(ctx, next) {
-        const items = db.getItems();
+    async getItems(ctx) {
+        const items = await ctx.app.db.getItems();
         ctx.body = items;
     },
-    createItem(ctx, next) {
+    async createItem(ctx) {
         if (ctx.headers.authorization === 'admin') {
-            db.writeItem(ctx.request.body);
-            ctx.body = 'created item';
+            const id = await ctx.app.db.createItem(ctx.request.body);
+            ctx.body = id;
         } else {
             ctx.status = 401;
             ctx.body = 'you are not allowed';
         }
     },
-    deleteItem(ctx, next) {
-        db.deleteItem(Number(ctx.params.itemId));
+    async deleteItem(ctx) {
+        await ctx.app.db.deleteItem(ctx.params.itemId);
         ctx.status = 204;
         ctx.body = '';
     },
-    updateItem(ctx) {
+    async updateItem(ctx) {
         const validator = new LIVR.Validator({
-            itemId: [ 'required', 'positive_integer' ]
+            itemId: [ 'required', 'string' ]
         });
-        
+
         const isValid = validator.validate({
             itemId: ctx.params.itemId
         });
@@ -35,8 +34,8 @@ const itemsController = {
             return;
         }
 
-        const updatedItem = db.updateItem(
-            Number(ctx.params.itemId),
+        const updatedItem = await ctx.app.db.updateItem(
+            ctx.params.itemId,
             ctx.request.body
         );
 
