@@ -11,9 +11,9 @@ initRoutes(router);
 app.db = new DB();
 
 app
-.use(bodyparser())
-.use(router.routes())
-.use(router.allowedMethods());
+    .use(bodyparser())
+    .use(router.routes())
+    .use(router.allowedMethods());
 
 module.exports = app.listen(3000, (err) => {
     if (err) {

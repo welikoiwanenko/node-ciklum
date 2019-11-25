@@ -22,19 +22,19 @@ const itemsController = {
         ctx.body = '';
     },
     async updateItem(ctx) {
-        const validator = new LIVR.Validator({
-            itemId: [ 'required', 'string' ]
-        });
-
-        const isValid = validator.validate({
-            itemId: ctx.params.itemId
-        });
-
-        if (!isValid) {
-            ctx.body = validator.getErrors();
-            ctx.status = 400;
-            return;
-        }
+        // const validator = new LIVR.Validator({
+        //     itemId: [ 'required', 'string' ]
+        // });
+        //
+        // const isValid = validator.validate({
+        //     itemId: ctx.params.itemId
+        // });
+        //
+        // if (!isValid) {
+        //     ctx.body = validator.getErrors();
+        //     ctx.status = 400;
+        //     return;
+        // }
 
         const updatedItem = await ctx.app.db.updateItem(
             ctx.params.itemId,
