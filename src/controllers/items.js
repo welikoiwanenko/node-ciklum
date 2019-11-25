@@ -2,16 +2,18 @@ const LIVR = require('livr');
 
 const itemsController = {
     async getItems(ctx) {
-        const items = await ctx.app.db.getItems();
-        ctx.body = items;
+        ctx.body = await ctx.app.db.getItems();
     },
     async createItem(ctx) {
         if (ctx.headers.authorization === 'admin') {
-            const id = await ctx.app.db.createItem(ctx.request.body);
-            ctx.body = id;
+            const item = await ctx.app.db.createItem(ctx.request.body);
+            ctx.status = 201;
+            ctx.body = item;
         } else {
             ctx.status = 401;
-            ctx.body = 'you are not allowed';
+            ctx.body = {
+                message: 'You are not allowed'
+            };
         }
     },
     async deleteItem(ctx) {

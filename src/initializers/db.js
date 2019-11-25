@@ -30,26 +30,28 @@ class DB {
         await writeFileAsync(this.dbFilename, JSON.stringify( items ));
     }
 
-    async getItems() {
-        const items = await this.readDb();
+    async truncateDb() {
+        await writeFileAsync(this.dbFilename, JSON.stringify( [] ));
+    }
 
-        return items;
+    async getItems() {
+        return this.readDb();
     }
 
     async getItem(id) {
-        const { items } = await this.readDb();
+        const items = await this.readDb();
 
         return items.filter(product => product.id === id)[0];
     };
 
     async createItem({ price, name }) {
         const items = await this.readDb();
-        const id = uuid();
+        const item = { id: uuid(), name, price };
+        items.push(item);
 
-        items.push({ id, name, price });
         await this.writeDb(items);
 
-        return id;
+        return item;
     }
 
     async updateItem(id, props) {
