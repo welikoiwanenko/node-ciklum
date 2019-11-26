@@ -1,5 +1,3 @@
-const LIVR = require('livr');
-
 const itemsController = {
     async getItems(ctx) {
         ctx.body = await ctx.app.db.getItems();
@@ -22,20 +20,6 @@ const itemsController = {
         ctx.body = '';
     },
     async updateItem(ctx) {
-        const validator = new LIVR.Validator({
-            itemId: [ 'required', 'string' ]
-        });
-
-        const isValid = validator.validate({
-            itemId: ctx.params.itemId
-        });
-
-        if (!isValid) {
-            ctx.body = validator.getErrors();
-            ctx.status = 400;
-            return;
-        }
-
         const updatedItem = await ctx.app.db.updateItem(
             ctx.params.itemId,
             ctx.request.body
